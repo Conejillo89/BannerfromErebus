@@ -8,22 +8,27 @@ from PIL import Image, ImageDraw, ImageFont
 st.set_page_config(page_title="Banner Studio Pro Ultimate", layout="wide")
 st.sidebar.image("Banners/assets/dibujo.png", width=250)
 
-# ==============================================================================
-# FUNCIÓN AUXILIAR PARA BASE64
-# ==============================================================================
+
 def obtener_base64(ruta_archivo):
     """Lee un archivo local y devuelve la cadena en formato Base64."""
     with open(ruta_archivo, "rb") as f:
         datos = f.read()
     return base64.b64encode(datos).decode()
 
-# ==============================================================================
-# 1. ESTILO CSS PERSONALIZADO CON FONDO EN BASE64 Y FUENTE H1 LOCAL / SUBIDA
-# ==============================================================================
-ruta_fondo_local = "Banners/assets/fondo.png" 
+
+ruta_fondo_local = "Banners/assets/fondo.png"
+ruta_fondo_movil = "Banners/assets/fondo_mobile.png"
+css_fondo = ""
 
 try:
     base64_fondo = obtener_base64(ruta_fondo_local)
+    
+ 
+    try:
+        base64_fondo_movil = obtener_base64(ruta_fondo_movil)
+    except FileNotFoundError:
+        base64_fondo_movil = base64_fondo
+
     css_fondo = f"""
     .stApp {{
         background-image: url("data:image/png;base64,{base64_fondo}");
@@ -31,6 +36,16 @@ try:
         background-position: center;
         background-attachment: fixed;
         color: #F8FAFC;
+    }}
+
+    /* Adaptación perfecta para celulares */
+    @media screen and (max-width: 768px) {{
+        .stApp {{
+            background-image: url("data:image/png;base64,{base64_fondo_movil}") !important;
+            background-size: cover !important;
+            background-position: center center !important;
+            background-attachment: scroll !important;
+        }}
     }}
     """
 except FileNotFoundError:
@@ -41,10 +56,7 @@ except FileNotFoundError:
     }
     """
 
-# ------------------------------------------------------------------------------
-# LÓGICA PARA CARGAR LA FUENTE PARA EL TÍTULO DE LA APP (H1)
-# ------------------------------------------------------------------------------
-# Nombre de la fuente preferida local en el mismo directorio
+
 nombre_fuente_local = "Visionaries_2.ttf"
 
 if not os.path.exists(nombre_fuente_local):
@@ -93,7 +105,7 @@ elif os.path.exists(nombre_fuente_local):
         }}
     """
 else:
-    # 3. Fallback en caso de no encontrar la fuente
+  
     css_fuente_h1_custom = """
         h1, .stApp h1 {{
             color: #000000 !important; 
@@ -191,9 +203,7 @@ st.markdown(f"""
     </style>
 """, unsafe_allow_html=True)
 
-# ==============================================================================
-# 2. BARRA LATERAL (CONTROLES Y BRANDING)
-# ==============================================================================
+
 
 st.sidebar.markdown("---")
 st.sidebar.header("• Branding y Elementos")
@@ -255,9 +265,7 @@ pos_x_franja_pct = st.sidebar.slider("Posición Horizontal Recuadro (%)", 0, 100
 ancho_franja_pct = st.sidebar.slider("Ancho Recuadro (%)", 10, 100, 100)
 alto_franja_pct = st.sidebar.slider("Alto Recuadro (%)", 10, 100, 35)
 
-# ==============================================================================
-# 3. ÁREA PRINCIPAL
-# ==============================================================================
+
 col_panel, col_preview = st.columns([1, 1], gap="large")
 
 with col_panel:
@@ -289,9 +297,6 @@ with col_panel:
         
     
 
-# ==============================================================================
-# 4. FUNCIONES AUXILIARES DE PROCESAMIENTO
-# ==============================================================================
 def hex_a_rgb(hex_str):
     hex_limpio = hex_str.lstrip('#')
     return (int(hex_limpio[0:2], 16), int(hex_limpio[2:4], 16), int(hex_limpio[4:6], 16))
@@ -412,9 +417,7 @@ def construir_banner(foto_base, logo_file, pos_esquina, frase_principal,
 
     return img_resultado
 
-# ==============================================================================
-# 5. RENDERIZADO Y GENERACIÓN EN LOTE
-# ==============================================================================
+
 rgb_texto = hex_a_rgb(color_texto_hex)
 rgb_subtitulo = hex_a_rgb(color_subtitulo_hex)
 rgb_contacto = hex_a_rgb(color_contacto_hex)
