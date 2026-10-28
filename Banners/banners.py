@@ -35,7 +35,7 @@ try:
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
-        color: #F8FAFC;
+        color: #0882fc;
     }}
 
     /* Adaptación perfecta para celulares */
