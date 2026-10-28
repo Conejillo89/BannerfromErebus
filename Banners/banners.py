@@ -20,7 +20,7 @@ def obtener_base64(ruta_archivo):
 # ==============================================================================
 # 1. ESTILO CSS PERSONALIZADO CON FONDO EN BASE64 Y FUENTE H1 LOCAL / SUBIDA
 # ==============================================================================
-ruta_fondo_local = "Banners/assets/Sin nombre.png" 
+ruta_fondo_local = "Banners/assets/fondo.png" 
 
 try:
     base64_fondo = obtener_base64(ruta_fondo_local)
