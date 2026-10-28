@@ -94,7 +94,29 @@ st.markdown(f"""
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
     header, [data-testid="stHeader"] {{
-        display: none !important;
+       <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    /* Ocultar el header superior SOLO en computadoras para mantener limpio el diseño */
+    @media screen and (min-width: 769px) {
+        header, [data-testid="stHeader"] {
+            display: none !important;
+        }
+    }
+
+    /* En celulares, SÍ mostramos el header para que aparezca el botón del menú lateral */
+    @media screen and (max-width: 768px) {
+        header, [data-testid="stHeader"] {
+            display: block !important;
+            background-color: transparent !important;
+        }
+    }
+
+    .stApp {{
+        margin-top: 0px; /* Evitamos márgenes negativos extraños en móvil */
+    }}
+    
+    /* Resto de tus estilos... */
     }}
 
     .stApp {{
