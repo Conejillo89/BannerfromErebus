@@ -93,49 +93,37 @@ st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-    header, [data-testid="stHeader"] {{
-       <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
-    /* Ocultar el header superior SOLO en computadoras para mantener limpio el diseño */
-    @media screen and (min-width: 769px) {
-        header, [data-testid="stHeader"] {
+    /* Ocultar el header superior SOLO en computadoras */
+    @media screen and (min-width: 769px) {{
+        header, [data-testid="stHeader"] {{
             display: none !important;
-        }
-    }
+        }}
+    }}
 
-    /* En celulares, SÍ mostramos el header para que aparezca el botón del menú lateral */
-    @media screen and (max-width: 768px) {
-        header, [data-testid="stHeader"] {
+    /* En celulares, mostramos el header para que aparezca el botón del menú lateral */
+    @media screen and (max-width: 768px) {{
+        header, [data-testid="stHeader"] {{
             display: block !important;
             background-color: transparent !important;
-        }
-    }
-
-    .stApp {{
-        margin-top: 0px; /* Evitamos márgenes negativos extraños en móvil */
-    }}
-    
-    /* Resto de tus estilos... */
+        }}
     }}
 
     .stApp {{
-        margin-top: -20px;
+        margin-top: 0px;
     }}
 
     html, body, [class*="css"], .stMarkdown {{
         font-family: 'Poppins', sans-serif;
     }}
 
+    /* Inyección de variables seguras */
     {css_fondo}
     {css_fuente_h1_custom}
 
-    /* ASEGURAR VISIBILIDAD DE LA BARRA LATERAL EN MÓVIL */
     [data-testid="stSidebar"] {{
         background-color: rgba(168, 198, 247, 0.98) !important;    
     }}
 
-    /* Permitir que la barra lateral colapse de forma limpia en móvil sin desaparecer */
     @media screen and (max-width: 768px) {{
         [data-testid="stSidebar"] {{
             width: 85% !important;
