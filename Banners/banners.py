@@ -23,7 +23,6 @@ css_fondo = ""
 try:
     base64_fondo = obtener_base64(ruta_fondo_local)
     
- 
     try:
         base64_fondo_movil = obtener_base64(ruta_fondo_movil)
     except FileNotFoundError:
@@ -60,13 +59,11 @@ except FileNotFoundError:
 nombre_fuente_local = "Visionaries_2.ttf"
 
 if not os.path.exists(nombre_fuente_local):
-    # Probar variante en minúsculas por si acaso
     nombre_fuente_local = "Banners/assets/visionaries_2.ttf"
 
 css_fuente_h1_custom = ""
 
 if os.path.exists(nombre_fuente_local):
-    # Cargar la fuente local automáticamente
     with open(nombre_fuente_local, "rb") as archivo_fuente:
         bytes_fuente = archivo_fuente.read()
 
@@ -80,32 +77,12 @@ if os.path.exists(nombre_fuente_local):
 
         h1, .stApp h1, [data-testid="stMarkdownContainer"] h1 {{
             font-family: 'VisionariesCustom', sans-serif !important;
-            font-size: 60px !important;
+            font-size: clamp(32px, 6vw, 60px) !important;
             color: #000000 !important;
-            letter-spacing: 4px !important;
-        }}
-    """
-
-elif os.path.exists(nombre_fuente_local):
-    # 2. Si el archivo existe en la misma carpeta del script .py
-    base64_fuente = obtener_base64(nombre_fuente_local)
-    ext_fuente = "opentype" if nombre_fuente_local.endswith(".otf") else "truetype"
-    
-    css_fuente_h1_custom = f"""
-        @font-face {{
-            font-family: 'VisionariesCustom';
-            src: url("data:font/{ext_fuente};charset=utf-8;base64,{base64_fuente}") format('{ext_fuente}');
-        }}
-
-        h1, .stApp h1, [data-testid="stMarkdownContainer"] h1 {{
-            font-family: 'VisionariesCustom', sans-serif !important;
-            font-size: 60px !important;
-            color: #000000 !important;
-            letter-spacing: 4px !important;
+            letter-spacing: 2px !important;
         }}
     """
 else:
-  
     css_fuente_h1_custom = """
         h1, .stApp h1 {{
             color: #000000 !important; 
@@ -121,7 +98,7 @@ st.markdown(f"""
     }}
 
     .stApp {{
-        margin-top: -50px;
+        margin-top: -20px;
     }}
 
     html, body, [class*="css"], .stMarkdown {{
@@ -131,12 +108,20 @@ st.markdown(f"""
     {css_fondo}
     {css_fuente_h1_custom}
 
+    /* ASEGURAR VISIBILIDAD DE LA BARRA LATERAL EN MÓVIL */
     [data-testid="stSidebar"] {{
-        background-color: rgba(168, 198, 247, 0.95);    
+        background-color: rgba(168, 198, 247, 0.98) !important;    
+    }}
+
+    /* Permitir que la barra lateral colapse de forma limpia en móvil sin desaparecer */
+    @media screen and (max-width: 768px) {{
+        [data-testid="stSidebar"] {{
+            width: 85% !important;
+        }}
     }}
 
     [data-testid="stCaptionContainer"] {{
-        color: #000000!important;
+        color: #000000 !important;
     }}
 
     h2, h3, .stApp h2, .stApp h3 {{
@@ -172,37 +157,14 @@ st.markdown(f"""
         box-shadow: 0 0 8px rgba(37, 99, 235, 0.4) !important;
     }}
 
-    div[data-baseweb="slider"] div[role="slider"] ::before,
-    div[data-baseweb="slider"] > div > div > div > div:first-child,
-    div[data-baseweb="slider"] div[data-testid="stSliderTickBar"] ~ div {{
-        background-color: #2563EB !important;
-        background: #2563EB !important;
-    }}
-
-    div[data-baseweb="slider"] div[data-testid="stSliderTickBar"] + div {{
-        background-color: #DBEAFE !important;
-    }}
-
     div[data-testid="stSlider"] label,
     div[data-testid="stSlider"] label p,
     div[data-testid="stWidgetLabel"] p {{
         color: #000000 !important;
         font-weight: 600 !important;
     }}
-
-    div[data-baseweb="slider"] div[role="slider"] div {{
-        color: #000000 !important;
-        font-weight: bold !important;
-    }}
-
-    div[data-testid="stSlider"] [data-testid="stMarkdownContainer"] p,
-    div[data-testid="stSlider"] [data-testid="stTickBar"] div {{
-        color: #000000 !important;
-        font-weight: 500 !important;
-    }}
     </style>
 """, unsafe_allow_html=True)
-
 
 
 st.sidebar.markdown("---")
@@ -265,45 +227,31 @@ pos_x_franja_pct = st.sidebar.slider("Posición Horizontal Recuadro (%)", 0, 100
 ancho_franja_pct = st.sidebar.slider("Ancho Recuadro (%)", 10, 100, 100)
 alto_franja_pct = st.sidebar.slider("Alto Recuadro (%)", 10, 100, 35)
 
-
+# Layout principal adaptado para apilarse verticalmente en móviles de forma automática
 col_panel, col_preview = st.columns([1, 1], gap="large")
 
 with col_panel:
     st.title("Banner Studio Pro Ultimate")
 
     st.markdown(
-        '<p style="font-size: 24px; font-weight: 500; color: #000000; margin-top: -10px;">'
+        '<p style="font-size: 20px; font-weight: 500; color: #000000; margin-top: -10px;">'
         'Genera piezas publicitarias con control geométrico total.'
         '</p>',
         unsafe_allow_html=True
     )
 
-    st.markdown(
-        """
-        <style>
-        div[data-testid="stWidgetLabel"] p {
-        font-size: 20px !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
     textos_entrada = st.text_area(
-    label="Escribe tus frases principales (una por línea):",
-    value="¡NUEVO LANZAMIENTO!\nENVÍO GRATIS HOY\nHASTA 12 CUOTAS SIN INTERÉS",
-    height=140
+        label="Escribe tus frases principales (una por línea):",
+        value="¡NUEVO LANZAMIENTO!\nENVÍO GRATIS HOY\nHASTA 12 CUOTAS SIN INTERÉS",
+        height=140
     )
 
-        
-    
 
 def hex_a_rgb(hex_str):
     hex_limpio = hex_str.lstrip('#')
     return (int(hex_limpio[0:2], 16), int(hex_limpio[2:4], 16), int(hex_limpio[4:6], 16))
 
 def obtener_objeto_fuente(fuente_subida, fuente_combo, tamano):
-    # 1. Si el usuario subió una fuente personalizada,
-    #    usarla para el banner.
     if fuente_subida is not None:
         try:
             return ImageFont.truetype(
@@ -312,12 +260,7 @@ def obtener_objeto_fuente(fuente_subida, fuente_combo, tamano):
             )
         except Exception:
             pass
-
-
-    # 3. Si no encuentra la fuente seleccionada,
-    #    usar la fuente predeterminada de PIL.
     return ImageFont.load_default()
-
 
 def calcular_posicion_logo(esquina, ancho_img, alto_img, ancho_lg, alto_lg, margen=20):
     if esquina == "Superior Izquierda":
@@ -326,7 +269,7 @@ def calcular_posicion_logo(esquina, ancho_img, alto_img, ancho_lg, alto_lg, marg
         return (ancho_img - ancho_lg - margen, margen)
     elif esquina == "Inferior Izquierda":
         return (margen, alto_img - alto_lg - margen)
-    else:  # Inferior Derecha
+    else: 
         return (ancho_img - ancho_lg - margen, alto_img - alto_lg - margen)
 
 def construir_banner(foto_base, logo_file, pos_esquina, frase_principal, 
@@ -349,7 +292,6 @@ def construir_banner(foto_base, logo_file, pos_esquina, frase_principal,
     capa_franja = Image.new('RGBA', (ancho, alto), (0, 0, 0, 0))
     dibujo_capa = ImageDraw.Draw(capa_franja)
     
-    # Color del recuadro con su respectiva opacidad
     color_con_alpha = color_recuadro_rgb + (opacidad,)
     dibujo_capa.rectangle((x1, y1, x2, y2), fill=color_con_alpha)
     img_resultado = Image.alpha_composite(img, capa_franja)
@@ -367,7 +309,6 @@ def construir_banner(foto_base, logo_file, pos_esquina, frase_principal,
     margen_interno = 20
     pos_actual_y = y1 + 15
 
-    # 1. Dibujar Título Principal
     if frase_principal.strip():
         bbox_titulo = obj_fuente_tit.getbbox(frase_principal)
         ancho_texto_principal = bbox_titulo[2] - bbox_titulo[0]
@@ -383,7 +324,6 @@ def construir_banner(foto_base, logo_file, pos_esquina, frase_principal,
         dibujo_texto.text((pos_texto_x, pos_actual_y), frase_principal, fill=color_rgb_tit, font=obj_fuente_tit)
         pos_actual_y += alto_texto_principal + 12
 
-    # 2. Dibujar Subtítulo
     if subtitulo_texto.strip():
         bbox_sub = obj_fuente_sub.getbbox(subtitulo_texto)
         ancho_sub = bbox_sub[2] - bbox_sub[0]
@@ -400,7 +340,6 @@ def construir_banner(foto_base, logo_file, pos_esquina, frase_principal,
             dibujo_texto.text((pos_sub_x, pos_actual_y), subtitulo_texto, fill=color_rgb_sub, font=obj_fuente_sub)
             pos_actual_y += alto_sub + 12
 
-    # 3. Dibujar Línea de Contacto
     if contacto_texto.strip():
         bbox_cont = obj_fuente_cont.getbbox(contacto_texto)
         ancho_cont = bbox_cont[2] - bbox_cont[0]
@@ -430,10 +369,10 @@ fuente_cont_activa = obtener_objeto_fuente(fuente_custom, opcion_fuente, tamano_
 lista_frases = [linea.strip() for linea in textos_entrada.split('\n') if linea.strip()]
 
 with col_panel:
-    ejecutar = st.button(" Generar Campaña Completa")
+    ejecutar = st.button("🚀 Generar Campaña Completa")
 
 with col_preview:
-    st.subheader(" Vista Previa en Tiempo Real")
+    st.subheader("🖼️ Vista Previa en Tiempo Real")
     
     if fondo_subido is not None:
         foto_base_original = Image.open(fondo_subido).convert("RGBA")
@@ -477,4 +416,4 @@ with col_preview:
                 mime="application/zip"
             )
     else:
-        st.info(" Sube una imagen de fondo en la barra lateral para activar la maquetación.")
+        st.info("💡 Sube una imagen de fondo en la barra lateral para activar la maquetación.")
