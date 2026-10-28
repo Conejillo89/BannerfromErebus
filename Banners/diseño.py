@@ -6,7 +6,7 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
 st.set_page_config(page_title="Banner Studio Pro Ultimate", layout="wide")
-st.sidebar.image("C:/Users/Conejillo/Pictures/design crap/dibujo.png", width=250)
+st.sidebar.image("Banners/assets/dibujo.png", width=250)
 
 # ==============================================================================
 # FUNCIÓN AUXILIAR PARA BASE64
@@ -20,7 +20,7 @@ def obtener_base64(ruta_archivo):
 # ==============================================================================
 # 1. ESTILO CSS PERSONALIZADO CON FONDO EN BASE64 Y FUENTE H1 LOCAL / SUBIDA
 # ==============================================================================
-ruta_fondo_local = "C:/Users/Conejillo/Pictures/design crap/Sin nombre.png" 
+ruta_fondo_local = "Banners/assets/Sin nombre.png" 
 
 try:
     base64_fondo = obtener_base64(ruta_fondo_local)
@@ -49,7 +49,7 @@ nombre_fuente_local = "Visionaries_2.ttf"
 
 if not os.path.exists(nombre_fuente_local):
     # Probar variante en minúsculas por si acaso
-    nombre_fuente_local = "visionaries_2.ttf"
+    nombre_fuente_local = "Banners/assets/visionaries_2.ttf"
 
 css_fuente_h1_custom = ""
 
