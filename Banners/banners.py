@@ -6,7 +6,7 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
 st.set_page_config(page_title="Banner Studio Pro Ultimate", layout="wide")
-st.sidebar.image("Banners/assets/dibujo.png", width=250)
+st.sidebar.image("Banners/assets/dibujo.png", width=150)
 
 
 def obtener_base64(ruta_archivo):
