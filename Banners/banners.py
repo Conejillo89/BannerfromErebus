@@ -56,10 +56,8 @@ except FileNotFoundError:
     """
 
 
-nombre_fuente_local = "Visionaries_2.ttf"
+nombre_fuente_local = "Banners/assets/Visionaries_2.ttf"
 
-if not os.path.exists(nombre_fuente_local):
-    nombre_fuente_local = "Banners/assets/visionaries_2.ttf"
 
 css_fuente_h1_custom = ""
 
